@@ -2,10 +2,9 @@ ul li {
     display: inline;
     margin: 5px 5px;
 }
-ul button {
+ul li button {
     color: white;
     margin: auto;
-    border: 1px solid #ddd;
     background-color: #2C2C32;
     cursor: pointer;
 }
@@ -18,7 +17,7 @@ button {
     margin: 5px 5px;
     color: white;
     padding: 5px;
-    border: 1px solid #ddd;
+    border: 1px solid #2C2C32;
     background-color: #2C2C32;
     cursor: pointer;
 }

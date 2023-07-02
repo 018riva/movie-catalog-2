@@ -4,7 +4,6 @@
 
 table {
     margin: 20px auto;
-    border: 1px solid black;
 }
 
 th {
@@ -33,9 +32,15 @@ td:last-child {
     min-width: 0;
     text-align: center;
 }
-tr:nth-child(odd) {
+tr {
     background-color: #eee;
 }
 input {
     margin: 20px 0px 0px 5px;
+    padding: 11px 10px 9px 10px;
+}
+label {
+    padding: 10px;
+    color: white;
+    background-color: #2C2C32;
 }
