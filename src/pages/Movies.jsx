@@ -29,7 +29,7 @@ const Movies = () => {
       { Header: 'ID', accessor: 'id' },
       { Header: 'Title', accessor: 'title' },
       { Header: 'Year', accessor: 'year' },
-      { Header: 'Runtime', accessor: 'runtime' },
+      { Header: 'untime', accessor: 'runtime' },
     ],
     []
   );
