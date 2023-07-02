@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "server": "json-server -w src/pages/table/db-movies.json -p 3031"
+    "server": "concurrently \"json-server -w src/pages/table/db-movies.json -p 3031\" \"json-server -w src/pages/table/db-actors.json -p 3032\""
   },
   "dependencies": {
     "react": "^18.2.0",

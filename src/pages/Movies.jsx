@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { JsonServer } from "./table/JsonServer";
+import { TableMovies } from "./table/TableMovies";
 
 const Movies = () => {
   const [filmsData, setFilmsData] = useState([]);
@@ -12,7 +12,7 @@ const Movies = () => {
 
         setFilmsData(data);
       } catch (error) {
-        console.error('Помилка завантаження даних:', error);
+        console.error('Error loading data:', error);
       }
     };
 
@@ -29,7 +29,7 @@ const Movies = () => {
     []
   );
 
-  return <JsonServer columns={columns} data={filmsData} />;
+  return <TableMovies columns={columns} data={filmsData} />;
 };;
   
 export {Movies}
