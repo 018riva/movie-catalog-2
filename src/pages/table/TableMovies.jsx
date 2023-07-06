@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTable, useFilters, useSortBy } from "react-table";
-import { useState } from 'react';
-import "./table-styles.css"
+import "./table-styles.css";
 
 const TableMovies = ({ columns, data }) => {
-  const [filterInput, setFilterInput] = useState('');
+  const [titleFilter, setTitleFilter] = useState("");
+  const [idFilter, setIdFilter] = useState("");
+  const [yearFilter, setYearFilter] = useState("");
+  const [runtimeFilter, setRuntimeFilter] = useState("");
+  const [hiddenColumns, setHiddenColumns] = useState([]);
 
   const {
     getTableProps,
@@ -16,10 +19,38 @@ const TableMovies = ({ columns, data }) => {
     setFilter,
   } = useTable({ columns, data }, useFilters, useSortBy);
 
-  const handleFilterChange = (e) => {
-    const value = e.target.value || '';
-    setFilter('title', value);
-    setFilterInput(value);
+  const handleTitleFilterChange = (e) => {
+    const value = e.target.value || "";
+    setFilter("title", value);
+    setTitleFilter(value);
+  };
+
+  const handleIdFilterChange = (e) => {
+    const value = e.target.value || "";
+    setFilter("id", value);
+    setIdFilter(value);
+  };
+
+  const handleYearFilterChange = (e) => {
+    const value = e.target.value || "";
+    setFilter("year", value);
+    setYearFilter(value);
+  };
+
+  const handleRuntimeFilterChange = (e) => {
+    const value = e.target.value || "";
+    setFilter("runtime", value);
+    setRuntimeFilter(value);
+  };
+
+  const handleColumnToggle = (columnId) => {
+    setHiddenColumns((prevHiddenColumns) => {
+      if (prevHiddenColumns.includes(columnId)) {
+        return prevHiddenColumns.filter((id) => id !== columnId);
+      } else {
+        return [...prevHiddenColumns, columnId];
+      }
+    });
   };
 
   return (
@@ -30,22 +61,76 @@ const TableMovies = ({ columns, data }) => {
           id="titleFilter"
           type="text"
           placeholder="Search by title"
-          value={filterInput}
-          onChange={handleFilterChange}
+          value={titleFilter}
+          onChange={handleTitleFilterChange}
         />
       </div>
-      <table {...getTableProps()}>
+      <div>
+        <label htmlFor="idFilter">Search ID:</label>
+        <input
+          id="idFilter"
+          type="text"
+          placeholder="Search by ID"
+          value={idFilter}
+          onChange={handleIdFilterChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="yearFilter">Search Year:</label>
+        <input
+          id="yearFilter"
+          type="text"
+          placeholder="Search by Year"
+          value={yearFilter}
+          onChange={handleYearFilterChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="runtimeFilter">Search Runtime:</label>
+        <input
+          id="runtimeFilter"
+          type="text"
+          placeholder="Search by Runtime"
+          value={runtimeFilter}
+          onChange={handleRuntimeFilterChange}
+        />
+      </div>
+      <div className="column-list">
+        <span>Visible Columns:</span>
+        {headerGroups.map((headerGroup) =>
+          headerGroup.headers.map((column) => (
+            <label key={column.id}>
+              <input
+                type="checkbox"
+                checked={!hiddenColumns.includes(column.id)}
+                onChange={() => handleColumnToggle(column.id)}
+              />
+              {column.render("Header")}
+            </label>
+          ))
+        )}
+      </div>
+      <table className="table" {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render('Header')}
-                  <span>
-                    {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                  </span>
-                </th>
-              ))}
+            <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => {
+                if (hiddenColumns.includes(column.id)) {
+                  return null;
+                }
+                return (
+                  <th
+                    key={column.id}
+                    className="table-header"
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                  >
+                    {column.render("Header")}
+                    <span>
+                      {column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}
+                    </span>
+                  </th>
+                );
+              })}
             </tr>
           ))}
         </thead>
@@ -53,10 +138,17 @@ const TableMovies = ({ columns, data }) => {
           {rows.map((row) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                ))}
+              <tr key={row.id} {...row.getRowProps()}>
+                {row.cells.map((cell) => {
+                  if (hiddenColumns.includes(cell.column.id)) {
+                    return null;
+                  }
+                  return (
+                    <td key={cell.column.id} className="table-cell" {...cell.getCellProps()}>
+                      {cell.render("Cell")}
+                    </td>
+                  );
+                })}
               </tr>
             );
           })}
@@ -66,4 +158,4 @@ const TableMovies = ({ columns, data }) => {
   );
 };
 
-export {TableMovies}
+export { TableMovies };

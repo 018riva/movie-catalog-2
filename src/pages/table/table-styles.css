@@ -44,3 +44,7 @@ label {
     color: white;
     background-color: #2C2C32;
 }
+
+.column-list span{
+    margin: 5px 10px;
+}
